@@ -23,5 +23,10 @@ CREATE TABLE employees (
     second_name VARCHAR(30) NOT NULL,
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES roles(id),
+    manager VARCHAR(50),
     PRIMARY KEY (id)
 );
+
+INSERT INTO departments VALUES (id, "IT"), (id, "ACCOUNTING"), (id, "SALES");
+INSERT INTO roles VALUES (id, "SALES LEAD", "10", "3"), (id, "SALES PERSON", "100", "3"), (id, "ACCOUNTANT", "2", "2"), (id, "IT LEAD", "200", "1");
+INSERT INTO employees VALUES (id, "nick", "davies", "4", "John"), (id, "me", "me", "2", "Also John");
