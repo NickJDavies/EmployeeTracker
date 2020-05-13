@@ -176,7 +176,7 @@ const UpdateEmployee = () => {
 // View Departments
 // ========================================
 const ViewDepartments = () => {
-    con.query("SELECT department_name FROM DEPARTMENTS", function (err, results){
+    con.query("SELECT department_name FROM departments", function (err, results){
         if (err) throw(err);
         let departments = results;
         console.log("")
@@ -201,6 +201,58 @@ const AddDepartment = () => {
 
 };
 // ========================================
+
+
+// View Roles
+// ========================================
+const ViewRoles = () => {
+    con.query("SELECT title, salary, department_name from roles LEFT JOIN departments ON departments.id = roles.department_id", function (err, results){
+        if (err) throw(err);
+        let roles = results;
+        console.log("")
+        console.table(roles);
+        loop();
+        return;
+    })
+};
+// ========================================
+
+
+// Adds a Role
+// ========================================
+const AddRole = () => {
+    con.query("SELECT id, department_name FROM departments", function(err, results){
+        let departments = [];
+        for (let i = 0; i < results.length; i++) {
+            departments.push(results[i]["department_name"])
+        }
+        inquirer .prompt([
+            {message: "What is the title of this role?", type: "input", name: "title"},
+            {message: "What is the salary of this role?", type: "input", name: "salary"},
+            {message: "What is the Role's department?", type:"list", choices: departments, name: "department"}
+        ]).then(e => {
+            if (isNaN(e.salary)) {
+                console.log("");
+                console.log("Please try again and enter a number.");
+                console.log("");
+                loop();
+                return;
+            }
+            for(let i = 0; i < results.length; i++) {
+                if (results[i]["department_name"] === e.department) {
+                    let role_id = results[i]["id"];
+                    con.query("INSERT INTO roles VALUES (id, '" + e.title + "', '" + e.salary.trim() + "', " + role_id + ")");
+                    console.log("Successfully Added Role - " + e.title + ".");
+                    loop();
+                    return;
+                }
+            }
+        })
+
+})};
+// ========================================
+
+
 
 
 // Part of loop(), for the User to select which task to complete.
@@ -246,7 +298,7 @@ const loop = () => {
         } else if (Task === "View Roles") {
             ViewRoles();
         } else if (Task === "Add Roles") {
-            // AddRoles();
+            AddRole();
         } else {
             loop();
             return;
