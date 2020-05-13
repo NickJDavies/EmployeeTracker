@@ -233,7 +233,7 @@ const AddRole = () => {
         ]).then(e => {
             if (isNaN(e.salary)) {
                 console.log("");
-                console.log("Please try again and enter a number.");
+                console.log("Please try again and enter a number for the salary.");
                 console.log("");
                 loop();
                 return;
